@@ -33,28 +33,41 @@ def upload():
 
     # Instantiate your form class
     uploadform= UploadForm()
-    if request.method == 'GET' and uploadform.validate_on_submit():
-        upload=uploadform.form.data
-        filename=secure_filename(upload.filename)
-        upload.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        return render_template('upload.html', form=uploadform)
     # Validate file upload on submit
     if request.method == 'POST' and uploadform.validate_on_submit():
         # Get file data and save to your uploads folder
-
-        upload = uploadform.upload.data
-
-        filename = secure_filename(upload.filename)
+        upload= uploadform.file.data
+        filename=secure_filename(upload.filename)
         upload.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         flash('File Saved', 'success')
         return redirect(url_for('home'))
-
-        
-    flash_errors(uploadform)
-    return render_template('upload.html', form=uploadform)
+    elif request.method == 'GET':
+        return render_template('upload.html', form=uploadform)
 
 
+@app.route('/files')
+def files():
+
+    if not session.get('logged_in'):
+        abort(401)
+
+    return render_template('files.html', images=get_uploaded_images())
+
+
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    print (rootdir)
+    if not session.get('logged_in'):
+        abort(401)
+
+    lists = []
+
+    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
+        for file in files :
+            lists += [file]
+    return lists
 
 
 @app.route('/login', methods=['POST', 'GET'])
