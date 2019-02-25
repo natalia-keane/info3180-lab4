@@ -9,7 +9,7 @@
 <h1 class="page-header">Uploaded Images</h1>
 
 <div class="grid-container">
-   {% for file in images %}
+   {% for file in files %}
 
   <div class="grid-item">
    <img src="{{ url_for('static', filename="uploads/" + file) }}" />
