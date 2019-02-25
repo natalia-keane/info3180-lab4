@@ -9,12 +9,14 @@
 <h1 class="page-header">Uploaded Images</h1>
 
 <div class="grid-container">
-  <ul class="list-group">
-  {% for image in images %}
-      <li class = "list-group-item d-inline-flex flex-sm-wrap flex-fill"> <img src="{{url_for('static',filename='uploads/'+image)}}"></img>
-      </li>
-  {%endfor%}
-  </ul>
+   {% for file in files %}
+
+  <div class="grid-item">
+   <img src="{{ url_for('static', filename="uploads/" + file) }}" />
+   </div>
+
+
+    {% endfor %}
 </div>
 
 {% endblock %}
