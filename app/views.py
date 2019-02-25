@@ -51,7 +51,7 @@ def upload():
 
 def get_uploaded_images():
     rootdir = os.getcwd()
-    print (rootdir)
+    #print (rootdir)
     if not session.get('logged_in'):
         abort(401)
 
