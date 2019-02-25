@@ -37,7 +37,7 @@ def upload():
     # Validate file upload on submit
     if request.method == 'POST' and uploadform.validate_on_submit():
         # Get file data and save to your uploads folder
-        upload= uploadform.file.data
+        upload= uploadform.uploaded.data
         filename=secure_filename(upload.filename)
         upload.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
@@ -46,14 +46,7 @@ def upload():
     elif request.method == 'GET':
         return render_template('upload.html', form=uploadform)
 
-
-@app.route('/files')
-def files():
-
-    if not session.get('logged_in'):
-        abort(401)
-
-    return render_template('files.html', images=get_uploaded_images())
+    return render_template('upload.html', form=uploadform)
 
 
 def get_uploaded_images():
@@ -68,6 +61,16 @@ def get_uploaded_images():
         for file in files :
             lists += [file]
     return lists
+
+
+@app.route('/files')
+def files():
+
+    if not session.get('logged_in'):
+        abort(401)
+
+    return render_template('files.html', images=get_uploaded_images())
+
 
 
 @app.route('/login', methods=['POST', 'GET'])
